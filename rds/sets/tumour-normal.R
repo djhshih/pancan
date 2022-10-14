@@ -22,11 +22,11 @@ pheno <- pheno[pheno$Do_not_use != "True", ];
 params <- list(
 	list(
 		in.fname = "expr-samples.vtr",
-		out.fname = filename("expr", "tumour-normal")
+		out.fname = filename("expr", "tumour-normal", date=NA)
 	),
 	list(
 		in.fname = "meth-samples.vtr",
-		out.fname = filename("meth", "tumour-normal")
+		out.fname = filename("meth", "tumour-normal", date=NA)
 	)
 );
 
