@@ -1,23 +1,28 @@
+# make tumour-normal sets
+
 library(io)
 
-# code	definition	abbreviation
-# 10	Blood Derived Normal	NB
-# 11	Solid Tissue Normal	NT
-# 12	Buccal Cell Normal	NBC
-# 13	EBV Immortalized Normal	NEBV
-# 14	Bone Marrow Normal	NBM
-
-normal.codes <- c("10", "11", "12", "13", "14");
+sample_type <- function(samples) {
+	tokens <- strsplit(samples, "-");
+	gsub("[A-Z].*", "", unlist(lapply(tokens, function(x) x[4])))
+}
 
 is_normal <- function(samples) {
-	tokens <- strsplit(samples, "-");
-	sample.type <- gsub("[A-Z]", "", unlist(lapply(tokens, function(x) x[4])));
-	sample.type %in% normal.codes
+	# code	definition	abbreviation
+	# 10	Blood Derived Normal	NB
+	# 11	Solid Tissue Normal	NT
+	# 12	Buccal Cell Normal	NBC
+	# 13	EBV Immortalized Normal	NEBV
+	# 14	Bone Marrow Normal	NBM
+	normal.codes <- c("10", "11", "12", "13", "14");
+
+	sample_type(samples) %in% normal.codes
 }
 
 pheno <- qread("../qc_pancan.tsv");
-pheno$is_normal <- is_normal(pheno$aliquot_barcode);
 pheno <- pheno[pheno$Do_not_use != "True", ];
+
+pheno$is_normal <- is_normal(pheno$aliquot_barcode);
 
 params <- list(
 	list(
