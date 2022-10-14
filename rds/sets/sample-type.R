@@ -8,11 +8,8 @@ sample_type <- function(samples) {
 pheno <- qread("../qc_pancan.tsv");
 pheno <- pheno[pheno$Do_not_use != "True", ];
 
-group.fname = filename("sample-type", date=NA);
-
 stypes <- sample_type(pheno$aliquot_barcode);
 table(stypes)
-pheno$aliquot_barcode[stypes == "20"]
 
 # remove control analyte samples and other unusual sample types
 idx <- ! stypes %in% c("20", "40", "50", "60", "61");
@@ -29,14 +26,16 @@ stypesl <- scode$letter_code[match(stypes, scode$code)];
 group.d <- pheno[, c("patient_barcode", "aliquot_barcode", "cancer type", "platform")];
 colnames(group.d) <- c("patient_id", "sample_id", "cancer_type", "platform");
 group.d$sample_type <- stypesl;
-group.d$group <- with(group.d, paste0(cancer_type, "_", sample_type));
+group.d$set <- with(group.d, paste0(cancer_type, "_", sample_type));
 
-# convert to factors
-group.d$cancer_type <- factor(group.d$cancer_type);
-group.d$platform <- factor(group.d$platform);
-group.d$sample_type <- factor(group.d$sample_type);
-group.d$group <- factor(group.d$group);
+with(group.d, table(set))
 
-with(group.d, table(group))
+qwrite(group.d, "annot_sample-type.tsv");
 
-qwrite(group.d, insert(group.fname, ext="rds"));
+sets <- lapply(split(group.d, group.d$set), function(x) x$sample_id);
+#min.set.size <- 5;
+#sizes <- vapply(sets, length, 0L);
+#sets.f <- sets[sizes >= min.set.size];
+
+qwrite(sets, "sample-type.rds");
+
