@@ -26,5 +26,6 @@ ln -s $indir/7d4c0344-f018-4ab0-949a-09815f483480/merge_merged_reals.tar.gz para
 
 ln -s $indir/0fc78496-818b-4896-bd83-52db1f533c5c/clinical_PANCAN_patient_with_followup.tsv clinical_pancan.tsv
 
-#55d9bf6f-0712-4315-b588-e6f8e295018e	PanCanAtlas_miRNA_sample_information_list.txt	02bb56712be34bcd58c50d90387aebde	553408
-#1b5f413e-a8d1-4d10-92eb-7c4ae739ed81	TCGA-CDR-SupplementalTableS1.xlsx	a4591b2dcee39591f59e5e25a6ce75fa	2945129
+ln -s $indir/55d9bf6f-0712-4315-b588-e6f8e295018e/PanCanAtlas_miRNA_sample_information_list.txt	sample-info_mir_pancan.tsv
+
+ln -s $indir/1b5f413e-a8d1-4d10-92eb-7c4ae739ed81/TCGA-CDR-SupplementalTableS1.xlsx cdr_tcga.xlsx
