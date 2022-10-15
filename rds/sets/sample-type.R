@@ -1,4 +1,5 @@
 library(io)
+library(dplyr)
 
 sample_type <- function(samples) {
 	tokens <- strsplit(samples, "-");
@@ -39,6 +40,13 @@ with(group.d, table(set))
 
 qwrite(group.d, "annot_sample-type.tsv");
 
+count.group.d <- group_by(group.d, cancer_type, sample_type, set, platform) %>%
+	summarize(n = n()) %>%
+	filter(platform != "") %>%
+	arrange(platform, cancer_type, sample_type);
+
+qwrite(count.group.d, "count_sample-type.tsv");
+
 sets <- lapply(split(group.d, group.d$set), function(x) x$sample_id);
 #min.set.size <- 5;
 #sizes <- vapply(sets, length, 0L);
@@ -47,8 +55,6 @@ sets <- lapply(split(group.d, group.d$set), function(x) x$sample_id);
 qwrite(sets, "sample-type.rds");
 
 # --- Get multiomic sets
-
-library(dplyr)
 
 sample_to_patient <- function(x) {
 	unlist(lapply(strsplit(x, "-", fixed=TRUE),
